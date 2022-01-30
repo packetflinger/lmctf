@@ -14,6 +14,8 @@ _CrtMemState startup1;	// memory diagnostics
 #define OutputDebugString	//not doing Windows
 #endif
 
+#include <stdint.h>
+
 //#define ZBOT
 
 //#define OLDOBSERVERCODE
