@@ -223,6 +223,7 @@ void InitGame(void)
 	vote_enabled = gi.cvar("vote_enabled", "1", 0);
 	vote_mask = gi.cvar("vote_mask", "65535", 0);
 	vote_threshold = gi.cvar("vote_threshold", "50", 0);
+	vote_time = gi.cvar("vote_time", "30", 0);
 
 
 #ifdef ZBOT

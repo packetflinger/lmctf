@@ -613,6 +613,7 @@ extern  cvar_t  *countdown_time; // the number of seconds to count before match 
 extern  cvar_t  *vote_enabled;
 extern  cvar_t  *vote_mask;     // bitmask, proposals allowed
 extern  cvar_t  *vote_threshold;    // percent required to pass
+extern  cvar_t  *vote_time;     // seconds for vote to last
 
 extern vote_t vote;
 

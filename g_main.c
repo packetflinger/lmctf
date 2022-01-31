@@ -82,6 +82,7 @@ cvar_t  *countdown_time;
 cvar_t  *vote_enabled;
 cvar_t  *vote_mask;
 cvar_t  *vote_threshold;
+cvar_t  *vote_time;
 
 
 #ifdef ZBOT
