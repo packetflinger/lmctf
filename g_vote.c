@@ -16,6 +16,31 @@ int VoteType;
 vote_t vote;
 
 /**
+ * Called when a player uses the vote command
+ */
+void Cmd_Vote_f(edict_t *ent)
+{
+    if (gi.argc() < 2) {
+        // show usage
+        gi.cprintf(ent, PRINT_HIGH, "Usage: vote <proposal> <args>\n");
+        return;
+    }
+
+    char *proposal = gi.argv(1);
+    if (Q_stricmp (proposal, "yes") == 0) {
+        // player voted yes
+        return;
+    }
+
+    if (Q_stricmp (proposal, "no") == 0) {
+        // player voted no
+        return;
+    }
+
+
+}
+
+/**
  * Runs every second to check on the vote
  */
 void VoteThink(edict_t *ent)

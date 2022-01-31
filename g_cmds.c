@@ -2409,6 +2409,11 @@ void ClientCommand (edict_t *ent)
 		return;
 	}
 
+	if (Q_stricmp (cmd, "vote") == 0) {
+	    Cmd_Vote_f(ent);
+	    return;
+	}
+
 	if (Q_stricmp (cmd, "players") == 0)
 	{
 		Cmd_Players_f (ent);
