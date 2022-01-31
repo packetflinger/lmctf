@@ -16,24 +16,48 @@ int VoteType;
 vote_t vote;
 
 /**
+ * Locate the proposal value based on string input
+ */
+static uint8_t find_proposal(char *str)
+{
+    for (uint8_t i=0; i<VP_LENGTH; i++) {
+        //
+    }
+}
+
+/**
+ * A player cast their vote
+ */
+void VoteCast(edict_t *ent, int8_t v)
+{
+    char *strvote = (v > 0) ? "YES" : "NO";
+    if (ent->vote.vote != 0) {
+        gi.bprintf(PRINT_HIGH, "%s changed their vote to %s\n", NAME(ent), strvote);
+    } else {
+        gi.bprintf(PRINT_HIGH, "%s voted %s\n", NAME(ent), strvote);
+    }
+
+    ent->vote.vote = v;
+}
+
+/**
  * Called when a player uses the vote command
  */
 void Cmd_Vote_f(edict_t *ent)
 {
     if (gi.argc() < 2) {
-        // show usage
         gi.cprintf(ent, PRINT_HIGH, "Usage: vote <proposal> <args>\n");
         return;
     }
 
     char *proposal = gi.argv(1);
     if (Q_stricmp (proposal, "yes") == 0) {
-        // player voted yes
+        VoteCast(ent, VOTE_YES);
         return;
     }
 
     if (Q_stricmp (proposal, "no") == 0) {
-        // player voted no
+        VoteCast(ent, VOTE_NO);
         return;
     }
 

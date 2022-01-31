@@ -30,6 +30,8 @@ extern int VoteType;
 
 // max length of a string used in a vote proposal (like map name)
 #define MAX_VOTE_STRLEN     32
+#define VOTE_YES            1
+#define VOTE_NO            -1
 
 /**
  * Possible proposals
@@ -64,7 +66,19 @@ typedef struct {
     edict_t     *victim;                // for kick/mute, who is the target?
 } vote_t;
 
+
+/**
+ * Each client has this structure
+ */
+typedef struct {
+    uint32_t    lastcall;       // the last frame this user called a vote
+    uint32_t    callcount;      // how many votes this user has called
+    int8_t      vote;           // 0 = not voted, + is yes, - is no
+} client_vote_t;
+
+
 void VoteThink(edict_t *ent);
 void VoteStart(void);
 void VoteReset(void);
 void Cmd_Vote_f(edict_t *ent);
+void VoteCast(edict_t *ent, int8_t v);

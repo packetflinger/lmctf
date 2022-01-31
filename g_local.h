@@ -49,6 +49,7 @@ _CrtMemState startup1;	// memory diagnostics
 
 #define ISREF(ent) (ent->client->ctf.extra_flags & CTF_EXTRAFLAGS_REFEREE)
 #define CLAMP(val, low, high) ((val < low) ? low : (val > high) ? high : val)
+#define NAME(ent) (ent->client->pers.netname)
 
 // the "gameversion" client command will print this plus compile date
 #define GAMEVERSION     "LMCTF 6"
@@ -1366,6 +1367,7 @@ struct edict_s
 	int             dontfree;
 	float           droptime;
 	int             entprops; //flags to tag entities with, for use with flags, which have no client
+	client_vote_t   vote;
 	// END CTF CODE
 };
 
