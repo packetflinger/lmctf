@@ -220,6 +220,9 @@ void InitGame(void)
 	mod_website = gi.cvar("mod_website", "http://lmctf.com", 0);
 	autolock = gi.cvar("autolock", "0", 0);
 	countdown_time = gi.cvar("countdown_time", "15", 0);
+	vote_enabled = gi.cvar("vote_enabled", "1", 0);
+	vote_mask = gi.cvar("vote_mask", "65535", 0);
+	vote_threshold = gi.cvar("vote_threshold", "50", 0);
 
 
 #ifdef ZBOT

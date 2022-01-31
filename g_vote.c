@@ -13,6 +13,42 @@ int VoteStarted = false;
 float VoteTime = 0.0;
 int VoteType;
 
+vote_t vote;
+
+/**
+ * Runs every second to check on the vote
+ */
+void VoteThink(edict_t *ent)
+{
+    gi.cprintf(NULL, PRINT_HIGH, "VoteThink %d\n", level.framenum);
+    ent->nextthink = level.time + 1;
+}
+
+
+/**
+ * Creates a vote entity which runs and controls the vote
+ */
+void VoteStart(void)
+{
+    memset(&vote, 0, sizeof(vote_t));
+    vote.ent = G_Spawn();
+    vote.votetime = level.framenum;
+    vote.ent->think = VoteThink;
+    vote.ent->nextthink = level.time;
+    vote.active = true;
+}
+
+
+/**
+ * Stops the current vote and resets the whole struct
+ */
+void VoteReset(void)
+{
+    vote.ent->think = G_FreeEdict;
+    memset(&vote, 0, sizeof(vote_t));
+}
+
+//////// Remove all below ///////////////
 int Clear_All_Ballots (edict_t *ent)
 {
 	edict_t * player = NULL;

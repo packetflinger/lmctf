@@ -1,3 +1,9 @@
+/**
+ * Voting stuff
+ */
+
+#pragma once
+
 #include "g_local.h"
 
 void Vote_Menu (edict_t *ent);
@@ -44,13 +50,20 @@ typedef enum {
  * The main structure to hold voting data
  */
 typedef struct {
-    qboolean    active;         // are we currently voting?
-    uint32_t    votetime;       // frame number this vote was started
-    uint32_t    lastvote;       // frame of last vote, for throttling
-    uint8_t     proposal;       // what are we voting on? (bitmask)
+    edict_t     *ent;                   // the vote entity
+    qboolean    active;                 // are we currently voting?
+    uint32_t    votetime;               // frame number this vote was started
+    uint32_t    lastvote;               // frame of last vote, for throttling
+    uint8_t     proposal[VP_LENGTH];    // what are we voting on? (bitmask)
     uint8_t     intvalue[VP_LENGTH];                    // number values
     char        strvalue[MAX_VOTE_STRLEN][VP_LENGTH];   // string values
-    char        display[0xff];  // for displaying the current proposals
-    int8_t      results;        // positive result is pass, negative is fail
-    uint8_t     votes;          // how many players have voted
+    char        display[0xff];          // for displaying the current proposals
+    int8_t      results;                // + is yes, - is no
+    uint8_t     votes;                  // how many players have voted
+    edict_t     *initiator;             // who called the vote?
+    edict_t     *victim;                // for kick/mute, who is the target?
 } vote_t;
+
+void VoteThink(edict_t *ent);
+void VoteStart(void);
+void VoteReset(void);

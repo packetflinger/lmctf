@@ -59,6 +59,7 @@ _CrtMemState startup1;	// memory diagnostics
 
 #include "p_stats.h" // STATS - LM_Hati
 #include "g_menu.h" // MENUS - LM_Jorm
+#include "g_vote.h"
 
 // protocol bytes that can be directly added to messages
 #define	svc_muzzleflash		1
@@ -609,6 +610,11 @@ extern  cvar_t  *fastswitch;
 extern  cvar_t  *mod_website;   // URL to show in team join centerprint
 extern  cvar_t  *autolock;      // lock/unlock teams with match status
 extern  cvar_t  *countdown_time; // the number of seconds to count before match start
+extern  cvar_t  *vote_enabled;
+extern  cvar_t  *vote_mask;     // bitmask, proposals allowed
+extern  cvar_t  *vote_threshold;    // percent required to pass
+
+extern vote_t vote;
 
 #ifdef ZBOT
 extern  cvar_t  *use_zbotdetect; // CTF CODE -- LM_Hati
