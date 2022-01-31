@@ -67,3 +67,4 @@ typedef struct {
 void VoteThink(edict_t *ent);
 void VoteStart(void);
 void VoteReset(void);
+void Cmd_Vote_f(edict_t *ent);
