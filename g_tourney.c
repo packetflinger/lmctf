@@ -41,7 +41,24 @@ edict_t *Query_DMVP()
  * to factory default state for start of match
  */
 void ResetLevel(void) {
-    edict_t *ent;
+    edict_t *ent, *flag;
+
+    // force anyone holding a flag to drop it like it's hot
+    for (int i=0 ; i<game.maxclients ; i++) {
+        ent = g_edicts + 1 + i;
+        if (!ent->inuse) {
+            continue;
+        }
+
+        flag = ClientHasFlag(ent);
+        if (flag) {
+            ctf_playerdropflag(ent, flag->item);
+        }
+    }
+
+    // reset the flags
+    ctf_resetflagandplayer(redflag, NULL);
+    ctf_resetflagandplayer(blueflag, NULL);
 
     //free up any stray ents (dropped weapons/quad/flags)
     for (ent = FIRSTENTITY; ent < LASTENTITY; ent++) {
@@ -66,9 +83,7 @@ void ResetLevel(void) {
         }
     }
 
-    // reset the flags
-    ctf_resetflagandplayer(redflag, redflag->owner);
-    ctf_resetflagandplayer(blueflag, blueflag->owner);
+
 }
 
 void Match_Start(edict_t *ent)
