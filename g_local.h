@@ -59,6 +59,10 @@
 #define FIRSTENTITY (g_edicts + 1 + game.maxclients)
 #define LASTENTITY  (g_edicts + globals.num_edicts)
 
+#define PLAYEROWNED(e)  (e->owner >= (g_edicts + 1) && e->owner <= (g_edicts + game.maxclients))
+#define ISTRIGGER(e)    (e->enttype == ENT_DOOR_TRIGGER || e->enttype == ENT_PLAT_TRIGGER)
+#define ISGIB(e)        (e->enttype == ENT_GIB)
+
 #define MAX_PRINT_BUF   8192
 
 // failsafe, VER should be defined by compiler cli arg
@@ -678,6 +682,7 @@ int     ArmorIndex (edict_t *ent);
 int     PowerArmorType (edict_t *ent);
 gitem_t *GetItemByIndex (int index);
 qboolean    Add_Ammo (edict_t *ent, gitem_t *item, int count);
+void    droptofloor (edict_t *ent);
 
 
 void    Team_centerprint (int color, char *message, char *elsemessage);
@@ -943,6 +948,22 @@ void string_replace(edict_t *person, char *inmsg, char *outmsg, int outsize);
 #define UNSET_STATUS_STR    "Unknown"
 #define RESPAWNED_STATUS_STR    "Respawned"
 
+
+typedef enum {
+    ENT_INVALID,
+    ENT_FUNC_DOOR,
+    ENT_FUNC_DOOR_ROTATING,
+    ENT_FUNC_AREAPORTAL,
+    ENT_GRENADE,
+    ENT_FUNC_TRAIN,
+    ENT_DOOR_TRIGGER,
+    ENT_PLAT_TRIGGER,
+    ENT_BODYQUE,
+    ENT_GHOST,
+    ENT_DROPPED_ITEM,
+    ENT_FLAG,
+    ENT_GIB,
+} enttype_t;
 
 // client data that stays across multiple level loads
 typedef struct {
@@ -1232,4 +1253,5 @@ struct edict_s {
     int         dontfree;
     float       droptime;
     int         entprops;           // for the flags
+    enttype_t   enttype;            // for easier resetting level
 };

@@ -443,6 +443,7 @@ qboolean ctf_spawnflag(int teamnum)
 		
 		ent = G_Spawn();
 		ent->classname = ED_NewString ("flag");
+		ent->enttype = ENT_FLAG;
 		ED_CallSpawn(ent);
 		
 		// Model support for flags
@@ -492,6 +493,7 @@ qboolean ctf_spawnflag(int teamnum)
 
 		ent = G_Spawn();
 		ent->classname = ED_NewString ("flag");
+		ent->enttype = ENT_FLAG;
 		ED_CallSpawn(ent);
 		// Model support for flags
 		ent->model = "players/male/flag2.md2";

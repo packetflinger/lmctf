@@ -35,6 +35,42 @@ edict_t *Query_DMVP()
     return dmvp;
 }
 
+
+/**
+ * Respawn/unlink/reset weapons, items, triggers (doors/lifts)
+ * to factory default state for start of match
+ */
+void ResetLevel(void) {
+    edict_t *ent;
+
+    //free up any stray ents (dropped weapons/quad/flags)
+    for (ent = FIRSTENTITY; ent < LASTENTITY; ent++) {
+        if (!ent->inuse) {
+            continue;
+        }
+
+        if ((ISTRIGGER(ent) || ISGIB(ent)) || PLAYEROWNED(ent)) {
+            G_FreeEdict(ent);
+        }
+    }
+
+    // immediately drop anything to the floor that requires it
+    for (ent = FIRSTENTITY; ent < LASTENTITY; ent++) {
+        if (!ent->inuse) {
+            continue;
+        }
+
+        if (ent->think == droptofloor) {
+            ent->nextthink = 0;
+            droptofloor(ent);
+        }
+    }
+
+    // reset the flags
+    ctf_resetflagandplayer(redflag, redflag->owner);
+    ctf_resetflagandplayer(blueflag, blueflag->owner);
+}
+
 void Match_Start(edict_t *ent)
 {
     int i;
