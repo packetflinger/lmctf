@@ -848,6 +848,7 @@ int DamageRuneHook(edict_t *targ, edict_t *inflictor, edict_t *attacker, int dam
 int ResistRuneHook(edict_t *targ, edict_t *inflictor, edict_t *attacker, int damage, int knockback, int dflags);
 void RuneThinkHook(edict_t *ent);
 void RuneWeaponThinkHook (edict_t *ent);
+void SpawnRunes(void);
 
 
 //
@@ -919,7 +920,6 @@ void ChaseNext(edict_t *ent);
 void ChasePrev(edict_t *ent);
 void GetChaseTarget(edict_t *ent);
 
-
 void ForceCommand(edict_t *ent, char *command);
 
 void string_replace(edict_t *person, char *inmsg, char *outmsg, int outsize);
@@ -963,6 +963,7 @@ typedef enum {
     ENT_GHOST,
     ENT_DROPPED_ITEM,
     ENT_FLAG,
+    ENT_RUNE,
     ENT_GIB,
 } enttype_t;
 

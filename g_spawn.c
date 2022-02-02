@@ -1019,18 +1019,7 @@ void SpawnEntities (char *mapname, char *entities, char *spawnpoint)
 
 	}
 
-	//in case you want to play single player runes
-	if ((int)runes->value & RUNE_DAMAGE)
-		SpawnRune(RUNE_DAMAGE);
-	if ((int)runes->value & RUNE_HASTE)
-		SpawnRune(RUNE_HASTE);
-	if ((int)runes->value & RUNE_RESIST)
-		SpawnRune(RUNE_RESIST);
-	if ((int)runes->value & RUNE_REGEN)
-		SpawnRune(RUNE_REGEN);
-	if ((int)runes->value & RUNE_VAMP)  //added by Vampire
-		SpawnRune(RUNE_VAMP);           
-
+	SpawnRunes();
 
 	Reset_MVP();
 

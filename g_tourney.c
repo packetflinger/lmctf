@@ -43,29 +43,32 @@ edict_t *Query_DMVP()
 void ResetLevel(void) {
     edict_t *ent, *flag;
 
-    // force anyone holding a flag to drop it like it's hot
     for (int i=0 ; i<game.maxclients ; i++) {
         ent = g_edicts + 1 + i;
         if (!ent->inuse) {
             continue;
         }
 
+        // force anyone holding a flag to drop it like it's hot
         flag = ClientHasFlag(ent);
         if (flag) {
             ctf_playerdropflag(ent, flag->item);
         }
+
+        // remove runes
+        ent->client->rune = NULL;
     }
 
     // reset the flags
     ctf_resetflagandplayer(redflag, NULL);
     ctf_resetflagandplayer(blueflag, NULL);
 
-    //free up any stray ents (dropped weapons/quad/flags)
     for (ent = FIRSTENTITY; ent < LASTENTITY; ent++) {
         if (!ent->inuse) {
             continue;
         }
 
+        // spawn anything that's been picked up
         if (ent->think == DoRespawn) {
             ent->think = NULL;
             ent->nextthink = 0.0f;
@@ -76,21 +79,26 @@ void ResetLevel(void) {
         if (ISGIB(ent) || PLAYEROWNED(ent)) {
             G_FreeEdict(ent);
         }
-    }
 
-    // immediately drop anything to the floor that requires it
-    for (ent = FIRSTENTITY; ent < LASTENTITY; ent++) {
-        if (!ent->inuse) {
-            continue;
+        // free any runes that have already spawned
+        if (ent->enttype == ENT_RUNE) {
+            G_FreeEdict(ent);
         }
 
         if (ent->think == droptofloor) {
             ent->nextthink = 0;
             droptofloor(ent);
         }
+
+        if (ISTRIGGER(ent)) {
+            //VectorCopy(ent->moveinfo.start_origin, ent->pos1);
+            //gi.dprintf("trigger ent: %p\t%f\t%f\t%f\n", ent, ent->s.origin[0], ent->s.origin[1], ent->s.origin[2]);
+            ///VECTORCOPY()
+        }
     }
 
-
+    // we removed runes above, add them back
+    SpawnRunes();
 }
 
 void Match_Start(edict_t *ent)
