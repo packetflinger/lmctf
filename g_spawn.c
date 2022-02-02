@@ -1042,7 +1042,10 @@ void SpawnEntities (char *mapname, char *entities, char *spawnpoint)
 
 	PlayerTrail_Init ();
 
-	sl_GameStart( &gi, level );	//	StdLog - Mark Davies
+	sl_GameStart(&gi, level);
+
+	// give everyone an initial match status
+	gi.configstring(CS_MATCHSTATUS, "pregame");
 }
 
 
