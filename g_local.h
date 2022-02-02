@@ -683,6 +683,7 @@ int     PowerArmorType (edict_t *ent);
 gitem_t *GetItemByIndex (int index);
 qboolean    Add_Ammo (edict_t *ent, gitem_t *item, int count);
 void    droptofloor (edict_t *ent);
+void    DoRespawn (edict_t *ent);
 
 
 void    Team_centerprint (int color, char *message, char *elsemessage);

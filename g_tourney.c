@@ -66,7 +66,14 @@ void ResetLevel(void) {
             continue;
         }
 
-        if ((ISTRIGGER(ent) || ISGIB(ent)) || PLAYEROWNED(ent)) {
+        if (ent->think == DoRespawn) {
+            ent->think = NULL;
+            ent->nextthink = 0.0f;
+            DoRespawn(ent);
+        }
+
+        //if ((ISTRIGGER(ent) || ISGIB(ent)) || PLAYEROWNED(ent)) {
+        if (ISGIB(ent) || PLAYEROWNED(ent)) {
             G_FreeEdict(ent);
         }
     }
