@@ -35,6 +35,72 @@ edict_t *Query_DMVP()
     return dmvp;
 }
 
+
+/**
+ * Respawn/unlink/reset weapons, items, triggers (doors/lifts)
+ * to factory default state for start of match
+ */
+void ResetLevel(void) {
+    edict_t *ent, *flag;
+
+    for (int i=0 ; i<game.maxclients ; i++) {
+        ent = g_edicts + 1 + i;
+        if (!ent->inuse) {
+            continue;
+        }
+
+        // force anyone holding a flag to drop it like it's hot
+        flag = ClientHasFlag(ent);
+        if (flag) {
+            ctf_playerdropflag(ent, flag->item);
+        }
+
+        // remove runes
+        ent->client->rune = NULL;
+    }
+
+    // reset the flags
+    ctf_resetflagandplayer(redflag, NULL);
+    ctf_resetflagandplayer(blueflag, NULL);
+
+    for (ent = FIRSTENTITY; ent < LASTENTITY; ent++) {
+        if (!ent->inuse) {
+            continue;
+        }
+
+        // spawn anything that's been picked up
+        if (ent->think == DoRespawn) {
+            ent->think = NULL;
+            ent->nextthink = 0.0f;
+            DoRespawn(ent);
+        }
+
+        //if ((ISTRIGGER(ent) || ISGIB(ent)) || PLAYEROWNED(ent)) {
+        if (ISGIB(ent) || PLAYEROWNED(ent)) {
+            G_FreeEdict(ent);
+        }
+
+        // free any runes that have already spawned
+        if (ent->enttype == ENT_RUNE) {
+            G_FreeEdict(ent);
+        }
+
+        if (ent->think == droptofloor) {
+            ent->nextthink = 0;
+            droptofloor(ent);
+        }
+
+        if (ISTRIGGER(ent)) {
+            //VectorCopy(ent->moveinfo.start_origin, ent->pos1);
+            //gi.dprintf("trigger ent: %p\t%f\t%f\t%f\n", ent, ent->s.origin[0], ent->s.origin[1], ent->s.origin[2]);
+            ///VECTORCOPY()
+        }
+    }
+
+    // we removed runes above, add them back
+    SpawnRunes();
+}
+
 void Match_Start(edict_t *ent)
 {
     int i;
@@ -80,6 +146,9 @@ void Match_Start(edict_t *ent)
             }
         }
     }
+
+    // put entities/flags back where they belong
+    ResetLevel();
 
     if(matchstate == MATCH_RAILGUN_COUNTDOWN) {
         matchstate = MATCH_RAILGUN_INPLAY;

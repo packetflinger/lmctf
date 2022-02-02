@@ -419,6 +419,7 @@ void SpawnRune (int type)
 		
 		ent = G_Spawn();
 		ent->classname = ED_NewString (name);
+		ent->enttype = ENT_RUNE;
 		ED_CallSpawn(ent);
 		
 		VectorCopy (spot->s.origin, ent->s.origin);
@@ -629,3 +630,28 @@ void RuneWeaponThinkHook (edict_t *ent)
 		}
 	}
 }
+
+
+void SpawnRunes(void)
+{
+    if ((int)runes->value & RUNE_DAMAGE) {
+        SpawnRune(RUNE_DAMAGE);
+    }
+
+    if ((int)runes->value & RUNE_HASTE) {
+        SpawnRune(RUNE_HASTE);
+    }
+
+    if ((int)runes->value & RUNE_RESIST) {
+        SpawnRune(RUNE_RESIST);
+    }
+
+    if ((int)runes->value & RUNE_REGEN) {
+        SpawnRune(RUNE_REGEN);
+    }
+
+    if ((int)runes->value & RUNE_VAMP) {
+        SpawnRune(RUNE_VAMP);
+    }
+}
+

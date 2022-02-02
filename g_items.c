@@ -996,6 +996,7 @@ edict_t *Drop_Item (edict_t *ent, gitem_t *item)
 	dropped->movetype = MOVETYPE_TOSS;  
 	dropped->touch = drop_temp_touch;
 	dropped->owner = ent;
+	dropped->enttype = ENT_DROPPED_ITEM;
 
 	if (ent->client)
 	{

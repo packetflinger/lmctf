@@ -438,6 +438,7 @@ void plat_spawn_inside_trigger (edict_t *ent)
 // middle trigger
 //	
 	trigger = G_Spawn();
+	trigger->enttype = ENT_PLAT_TRIGGER;
 	trigger->touch = Touch_Plat_Center;
 	trigger->movetype = MOVETYPE_NONE;
 	trigger->solid = SOLID_TRIGGER;
@@ -1043,6 +1044,7 @@ void Think_SpawnDoorTrigger (edict_t *ent)
 	maxs[1] += 60;
 
 	other = G_Spawn ();
+	other->enttype = ENT_DOOR_TRIGGER;
 	VectorCopy (mins, other->mins);
 	VectorCopy (maxs, other->maxs);
 	other->owner = ent;
@@ -1199,6 +1201,8 @@ void SP_func_door (edict_t *ent)
 	if (ent->spawnflags & 64)
 		ent->s.effects |= EF_ANIM_ALLFAST;
 
+	ent->enttype = ENT_FUNC_DOOR;
+
 	// to simplify logic elsewhere, make non-teamed doors into a team of one
 	if (!ent->team)
 		ent->teammaster = ent;
@@ -1330,6 +1334,8 @@ void SP_func_door_rotating (edict_t *ent)
 	if (ent->spawnflags & 16)
 		ent->s.effects |= EF_ANIM_ALL;
 
+	ent->enttype = ENT_FUNC_DOOR_ROTATING;
+
 	// to simplify logic elsewhere, make non-teamed doors into a team of one
 	if (!ent->team)
 		ent->teammaster = ent;
@@ -1421,6 +1427,7 @@ void SP_func_water (edict_t *self)
 		self->spawnflags |= DOOR_TOGGLE;
 
 	self->classname = "func_door";
+	self->enttype = ENT_FUNC_DOOR;
 
 	gi.linkentity (self);
 }
@@ -1661,6 +1668,7 @@ void SP_func_train (edict_t *self)
 	self->moveinfo.accel = self->moveinfo.decel = self->moveinfo.speed;
 
 	self->use = train_use;
+	self->enttype = ENT_FUNC_TRAIN;
 
 	gi.linkentity (self);
 
@@ -2011,6 +2019,7 @@ void SP_func_door_secret (edict_t *ent)
 	}
 	
 	ent->classname = "func_door";
+	ent->enttype = ENT_FUNC_DOOR;
 
 	gi.linkentity (ent);
 }

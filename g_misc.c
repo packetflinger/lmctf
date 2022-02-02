@@ -26,6 +26,7 @@ void SP_func_areaportal (edict_t *ent)
 {
 	ent->use = Use_Areaportal;
 	ent->count = 0;		// always start closed;
+	ent->enttype = ENT_FUNC_AREAPORTAL;
 }
 
 //=====================================================
@@ -135,6 +136,7 @@ void ThrowGib (edict_t *self, char *gibname, int damage, int type)
 	gib->flags |= FL_NO_KNOCKBACK;
 	gib->takedamage = DAMAGE_YES;
 	gib->die = gib_die;
+	gib->enttype = ENT_GIB;
 
 	if (type == GIB_ORGANIC)
 	{
@@ -181,6 +183,7 @@ void ThrowHead (edict_t *self, char *gibname, int damage, int type)
 	self->svflags &= ~SVF_MONSTER;
 	self->takedamage = DAMAGE_YES;
 	self->die = gib_die;
+	self->enttype = ENT_GIB;
 
 	if (type == GIB_ORGANIC)
 	{
