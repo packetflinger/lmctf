@@ -147,6 +147,9 @@ void Match_Start(edict_t *ent)
         }
     }
 
+    // put entities/flags back where they belong
+    ResetLevel();
+
     if(matchstate == MATCH_RAILGUN_COUNTDOWN) {
         matchstate = MATCH_RAILGUN_INPLAY;
         ent->count = railtime->value;
