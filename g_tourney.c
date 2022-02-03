@@ -20,6 +20,32 @@ edict_t *Declare_Railgun_Victor(void);
 void Use_Quad (edict_t *ent, gitem_t *item);
 
 
+void UpdateMatchStatus(void)
+{
+    char *status;
+    switch (matchstate) {
+    case MATCH_RAILGUN_COUNTDOWN:
+    case MATCH_COUNTDOWN:
+        status = "    Starting";
+        break;
+
+    case MATCH_RAILGUN_INPLAY:
+    case MATCH_INPLAY:
+        status = "     In Play";
+        break;
+
+    case MATCH_RAILGUN_OVER:
+    case MATCH_OVER:
+        status = "    Finished";
+        break;
+
+    default:
+        status = "     Pregame";
+    }
+
+    gi.configstring(CS_MATCHSTATUS, status);
+}
+
 void Reset_MVP()
 {
     omvp = dmvp = NULL;
@@ -150,7 +176,7 @@ void Match_Start(edict_t *ent)
     // put entities/flags back where they belong
     ResetLevel();
 
-    gi.configstring(CS_MATCHSTATUS, "Match Playing");
+    gi.configstring(CS_MATCHSTATUS, "     Playing");
 
     if(matchstate == MATCH_RAILGUN_COUNTDOWN) {
         matchstate = MATCH_RAILGUN_INPLAY;
@@ -277,7 +303,7 @@ void Match_End(edict_t *ent)
     matchstate = MATCH_OVER;
     ent->count = 300; // five minutes
     game.teamslocked = false;
-    gi.configstring(CS_MATCHSTATUS, "Pregame");
+    gi.configstring(CS_MATCHSTATUS, "     Pregame");
 }
 
 qboolean Match_InCountdown()
@@ -314,37 +340,40 @@ qboolean GamePaused()
     return match_pause;
 }
 
+/**
+ * The current match is either paused or unpaused
+ */
 void SetPause(qboolean state)
 {
     edict_t *ent;
     char    *message,
             *status;
-    int i;
+    uint8_t i;
 
     match_pause = state;
 
     if (state) {
-    	if ((int)autolock->value) {
-    		game.teamslocked = false;
-    	}
         message = "Game Paused\n";
         status = "Match Paused";
     } else {
-    	if ((int)autolock->value) {
-    		game.teamslocked = true;
-    	}
         message = "Game Unpaused\n";
-        status = "Match Playing";
+        status = "     Playing";
     }
 
-    for (i=0 ; i<game.maxclients ; i++) {  // Go through everyone
-        ent = g_edicts + 1 + i;            // Select the client entity from the list of ents.
-        if (!ent->inuse) {                 // Not in game yet is what I think this means.
+    if ((int)autolock->value) {
+        game.teamslocked = !state;
+    }
+
+    for (i=0 ; i<game.maxclients; i++) {
+        ent = g_edicts + 1 + i;
+        if (!ent->inuse) {
             continue;
         }
+
         gi.centerprintf(ent, message);
     }
-    gi.dprintf(message);
+
+    gi.cprintf(NULL, PRINT_HIGH, message);
     gi.configstring(CS_MATCHSTATUS, status);
 }
 
@@ -367,6 +396,35 @@ short Last_Guy       = 0;
 short Position_Count = 0;
 int   Time_Left      = 0;
 
+
+/**
+ * Format a quantity of seconds as a [HH:]MM:SS string
+ */
+void SecondsToTime(char *out, int secs)
+{
+    unsigned short  hours   = 0,
+                    minutes = 0,
+                    seconds = 0;
+
+    // don't let time be more than 99 hours
+    seconds = CLAMP(secs, 1, (99 * 3600));
+
+    if (seconds >= 3600) {
+        hours = seconds / 3600;
+        seconds -= (hours * 3600);
+    }
+
+    minutes = seconds / 60;
+    seconds -= (minutes * 60);
+
+    if (hours) {
+        sprintf(out, "%.2d:%.2d:%.2d", hours, minutes, seconds);
+    } else {
+        sprintf(out, "   %.2d:%.2d", minutes, seconds);
+    }
+}
+
+
 /**
  * Called from the game clock's think function pointer.
  * the edict_t* arg is the game clock
@@ -377,6 +435,8 @@ void Tourney_Think(edict_t *ent)
     edict_t *player;
     int     i;
     char    message[MAX_INFO_STRING];
+    char    time[15];
+
 
     ent->nextthink = level.time + 1;
 
@@ -384,6 +444,9 @@ void Tourney_Think(edict_t *ent)
     if (GamePaused()) {
         return;
     }
+
+    SecondsToTime(time, ent->count);
+    gi.configstring(CS_MATCHTIME, time);
 
     minutes = ent->count/60;
 

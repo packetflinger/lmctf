@@ -1034,7 +1034,7 @@ void SpawnEntities (char *mapname, char *entities, char *spawnpoint)
 	sl_GameStart(&gi, level);
 
 	// give everyone an initial match status
-	gi.configstring(CS_MATCHSTATUS, "pregame");
+	gi.configstring(CS_MATCHSTATUS, "     pregame");
 }
 
 
@@ -1232,13 +1232,19 @@ char *dm_statusbar =
 "num 2 25 "
 
 //bat - Added match time
-"xr -38 "
+//"xr -38 "
+//"yt 50 "
+//"num 2 26 "
+
+// match time
+"xr -72 "
 "yt 50 "
-"num 2 26 "
+"stat_string 26 "
 
 // match status
+"xr -104 "
 "yt 75 "
-"string 27 "
+"stat_string 27 "
 
 
 

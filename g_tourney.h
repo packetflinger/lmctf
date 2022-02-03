@@ -16,6 +16,7 @@ edict_t  *Query_OMVP();
 edict_t  *Query_DMVP();
 void     Reset_MVP();
 void     Match_End(edict_t *ent);
+void     UpdateMatchStatus(void);
 
 extern int matchstate;
 
