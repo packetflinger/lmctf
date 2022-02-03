@@ -73,15 +73,11 @@
   #define VER "r00~000000"
 #endif
 
-<<<<<<< HEAD
-#include "p_stats.h" // STATS - LM_Hati
-#include "g_menu.h" // MENUS - LM_Jorm
-#include "g_vote.h"
-=======
+
 #include "p_stats.h"
 #include "g_menu.h"
+#include "g_vote.h"
 
->>>>>>> teamlock
 
 // protocol bytes that can be directly added to messages
 #define svc_muzzleflash     1
@@ -581,32 +577,19 @@ extern cvar_t       *sv_maxvelocity;
 extern cvar_t       *sv_rollangle;
 extern cvar_t       *sv_rollspeed;
 extern cvar_t       *timelimit;
+extern cvar_t       *vote_enabled;
+extern cvar_t       *vote_mask;         // bitmask, proposals allowed
+extern cvar_t       *vote_threshold;    // percent required to pass
+extern cvar_t       *vote_time;         // seconds for vote to last
 
 #ifdef OLDOBSERVERCODE
   extern cvar_t     *autoobserve;
 #endif
-<<<<<<< HEAD
-extern  cvar_t  *refpassword; // CTF CODE -- LM_JORM
-extern  cvar_t  *rconpassword;  // CTF CODE -- LM_SURT
-extern  cvar_t  *motd_file;     // CTF CODE -- LM_SURT
-extern  cvar_t  *server_file;   // CTF CODE -- LM_SURT
-extern  cvar_t  *maplist_file;  // CTF CODE -- LM_SURT
-extern  cvar_t  *skin_file;     // CTF CODE -- LM_SURT
-extern  cvar_t  *skin_debug;    // For debugging skins file
-extern  cvar_t  *disabled_weps; // CTF CODE -- LM_SURT
-extern  cvar_t  *flag_init;
-extern  cvar_t  *fastswitch;
-extern  cvar_t  *mod_website;   // URL to show in team join centerprint
-extern  cvar_t  *autolock;      // lock/unlock teams with match status
-extern  cvar_t  *countdown_time; // the number of seconds to count before match start
-extern  cvar_t  *vote_enabled;
-extern  cvar_t  *vote_mask;     // bitmask, proposals allowed
-extern  cvar_t  *vote_threshold;    // percent required to pass
-extern  cvar_t  *vote_time;     // seconds for vote to last
+
+
 
 extern vote_t vote;
-=======
->>>>>>> teamlock
+
 
 #ifdef ZBOT
   extern cvar_t     *use_zbotdetect;
@@ -1152,6 +1135,7 @@ struct gclient_s {
     float           hit_carrier_time;
     int             last_popup_frame;
     client_ctf_t    ctf;
+    client_vote_t   vote;
     stats_player_s  *p_stats_player;
 };
 

@@ -150,6 +150,8 @@ void Match_Start(edict_t *ent)
     // put entities/flags back where they belong
     ResetLevel();
 
+    gi.configstring(CS_MATCHSTATUS, "Match Playing");
+
     if(matchstate == MATCH_RAILGUN_COUNTDOWN) {
         matchstate = MATCH_RAILGUN_INPLAY;
         ent->count = railtime->value;
@@ -275,6 +277,7 @@ void Match_End(edict_t *ent)
     matchstate = MATCH_OVER;
     ent->count = 300; // five minutes
     game.teamslocked = false;
+    gi.configstring(CS_MATCHSTATUS, "Pregame");
 }
 
 qboolean Match_InCountdown()
@@ -314,7 +317,8 @@ qboolean GamePaused()
 void SetPause(qboolean state)
 {
     edict_t *ent;
-    char *message;
+    char    *message,
+            *status;
     int i;
 
     match_pause = state;
@@ -324,11 +328,13 @@ void SetPause(qboolean state)
     		game.teamslocked = false;
     	}
         message = "Game Paused\n";
+        status = "Match Paused";
     } else {
     	if ((int)autolock->value) {
     		game.teamslocked = true;
     	}
         message = "Game Unpaused\n";
+        status = "Match Playing";
     }
 
     for (i=0 ; i<game.maxclients ; i++) {  // Go through everyone
@@ -339,6 +345,7 @@ void SetPause(qboolean state)
         gi.centerprintf(ent, message);
     }
     gi.dprintf(message);
+    gi.configstring(CS_MATCHSTATUS, status);
 }
 
 

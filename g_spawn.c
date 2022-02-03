@@ -1236,6 +1236,10 @@ char *dm_statusbar =
 "yt 50 "
 "num 2 26 "
 
+// match status
+"yt 75 "
+"string 27 "
+
 
 
 // Score

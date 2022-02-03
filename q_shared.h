@@ -996,6 +996,7 @@ typedef enum
 #define STAT_RED_CAPS			24		// Bat
 #define STAT_BLUE_CAPS			25		// Bat
 #define STAT_MATCH_TIME			26		// Bat
+#define STAT_MATCH_STATUS       27
 
 
 

@@ -1526,7 +1526,7 @@ edict_t     *cl_ent;
         !ent->client->showmenu)
         ent->client->showctfhud = true;
     */
-
+    ent->client->ps.stats[STAT_MATCH_STATUS] = CS_MATCHSTATUS;
 	ent->client->ps.stats[STAT_SPECTATOR] = 0;
 }
 

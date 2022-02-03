@@ -23,6 +23,8 @@ static uint8_t find_proposal(char *str)
     for (uint8_t i=0; i<VP_LENGTH; i++) {
         //
     }
+
+    return 0;
 }
 
 /**
@@ -30,14 +32,18 @@ static uint8_t find_proposal(char *str)
  */
 void VoteCast(edict_t *ent, int8_t v)
 {
+    if (!ent->client) {
+        return;
+    }
+
     char *strvote = (v > 0) ? "YES" : "NO";
-    if (ent->vote.vote != 0) {
+    if (ent->client->vote.vote != 0) {
         gi.bprintf(PRINT_HIGH, "%s changed their vote to %s\n", NAME(ent), strvote);
     } else {
         gi.bprintf(PRINT_HIGH, "%s voted %s\n", NAME(ent), strvote);
     }
 
-    ent->vote.vote = v;
+    ent->client->vote.vote = v;
 }
 
 /**
