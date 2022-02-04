@@ -1260,8 +1260,10 @@ edict_t     *cl_ent;
 
 		if (vote.active) {
 		    ent->client->ps.stats[STAT_VOTE_PROPOSAL] = CS_VOTEPROPOSAL;
+		    ent->client->ps.stats[STAT_VOTE_STATUS] = CS_VOTETIME;
 		} else {
 		    ent->client->ps.stats[STAT_VOTE_PROPOSAL] = 0;
+		    ent->client->ps.stats[STAT_VOTE_STATUS] = 0;
 		}
         
 

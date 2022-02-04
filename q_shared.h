@@ -998,6 +998,7 @@ typedef enum
 #define STAT_MATCH_TIME			26		// Bat
 #define STAT_MATCH_STATUS       27
 #define STAT_VOTE_PROPOSAL      28
+#define STAT_VOTE_STATUS        29
 
 
 

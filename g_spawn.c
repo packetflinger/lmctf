@@ -1285,10 +1285,18 @@ char *dm_statusbar =
   "stat_string 16 "
 "endif "
 
+// vote proposal
 "if 28 "
-  "xl -16 "
+  "xl 8 "
   "yb -32 "
   "stat_string 28"
+"endif "
+
+// vote timer/results
+"if 29 "
+  "xl -16 "
+  "yb -24 "
+  "stat_string 29"
 "endif "
 ;
 

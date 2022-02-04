@@ -174,6 +174,7 @@ void VoteBuildProposalString(char *output)
 void VoteThink(edict_t *ent)
 {
     static char timeleft[15];
+
     if (ent->count == 0) {
         VoteFinished();
         return;
@@ -181,8 +182,7 @@ void VoteThink(edict_t *ent)
 
     SecondsToTime(timeleft, ent->count);
 
-    gi.cprintf(NULL, PRINT_HIGH, "VoteThink %s\n", timeleft);
-    gi.configstring(CS_VOTEPROPOSAL, va("%s Vote: %s", timeleft, vote.display));
+    gi.configstring(CS_VOTETIME, va("%s - 0 yes, 0 no", timeleft));
 
     ent->nextthink = level.time + 1;
     ent->count--;
@@ -204,6 +204,8 @@ void VoteStart(void)
     vote.ent->nextthink = level.time;   // fire immediately
     vote.ent->count = (int)vote_time->value;
     vote.active = true;
+
+    gi.configstring(CS_VOTEPROPOSAL, va("Vote: %s", vote.display));
 }
 
 
