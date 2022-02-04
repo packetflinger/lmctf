@@ -131,6 +131,21 @@
 #define LM_QUAD_DEFAULT_TIME 60
 
 typedef enum {
+    STATE_WARMUP,
+    STATE_COUNTDOWN,
+    STATE_PLAY,
+    STATE_PAUSE,
+    STATE_INTERMISSION,
+} matchstate_t;
+
+
+typedef enum {
+    MODE_NORMAL,
+    MODE_RAIL,
+} matchmode_t;
+
+
+typedef enum {
     DAMAGE_NO,
     DAMAGE_YES,     // will take damage if hit
     DAMAGE_AIM      // auto targeting recognizes this
@@ -368,6 +383,7 @@ typedef struct {
     edict_t     *current_entity;        // entity running from G_RunFrame
     int         body_que;               // dead bodies
     int         power_cubes;            // ugly necessity for coop
+    matchstate_t   state;
 } level_locals_t;
 
 
