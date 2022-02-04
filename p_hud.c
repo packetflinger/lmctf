@@ -1257,6 +1257,12 @@ edict_t     *cl_ent;
 		ent->client->ps.stats[STAT_BLUE_CAPS] = Blue_Caps;
 		//ent->client->ps.stats[STAT_MATCH_TIME] = Time_Left;
 		ent->client->ps.stats[STAT_MATCH_TIME] = CS_MATCHTIME;
+
+		if (vote.active) {
+		    ent->client->ps.stats[STAT_VOTE_PROPOSAL] = CS_VOTEPROPOSAL;
+		} else {
+		    ent->client->ps.stats[STAT_VOTE_PROPOSAL] = 0;
+		}
         
 
 

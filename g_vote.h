@@ -33,22 +33,24 @@ extern int VoteType;
 #define VOTE_YES            1
 #define VOTE_NO            -1
 
-/**
- * Possible proposals
- */
-typedef enum {
-    VP_TIMELIMIT,
-    VP_FASTSWITCH,
-    VP_REFEREE,
-    VP_MAP,
-    VP_NEXTMAP,
-    VP_KICKPLAYER,
-    VP_MUTEPLAYER,
-    VP_LENGTH,      // always last!
+
+#define VOTE_KICK           (1<<0)
+#define VOTE_MAP            (1<<1)
+#define VOTE_RESET          (1<<2)
+#define VOTE_SWITCH         (1<<3)
+#define VOTE_TIMELIMIT      (1<<4)
+#define VOTE_MODE           (1<<5)
+#define VOTE_RESTART        (1<<6)
+
+
+typedef struct {
+    const char  *name;
+    int         bit;
+    qboolean    (*func)(edict_t *);
 } vote_proposal_t;
 
 
-/**
+/**s
  * The main structure to hold voting data
  */
 typedef struct {
@@ -56,9 +58,9 @@ typedef struct {
     qboolean    active;                 // are we currently voting?
     uint32_t    votetime;               // frame number this vote was started
     uint32_t    lastvote;               // frame of last vote, for throttling
-    uint8_t     proposal[VP_LENGTH];    // what are we voting on? (bitmask)
-    uint8_t     intvalue[VP_LENGTH];                    // number values
-    char        strvalue[MAX_VOTE_STRLEN][VP_LENGTH];   // string values
+    uint8_t     proposal;               // what are we voting on?
+    uint32_t    intvalue;               // number values
+    char        strvalue[MAX_VOTE_STRLEN];   // string values
     char        display[0xff];          // for displaying the current proposals
     int8_t      results;                // + is yes, - is no
     uint8_t     votes;                  // how many players have voted
@@ -82,3 +84,5 @@ void VoteStart(void);
 void VoteReset(void);
 void Cmd_Vote_f(edict_t *ent);
 void VoteCast(edict_t *ent, int8_t v);
+void VoteBuildProposalString(char *output);
+void VoteFinished(void);

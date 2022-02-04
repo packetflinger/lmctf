@@ -997,6 +997,7 @@ typedef enum
 #define STAT_BLUE_CAPS			25		// Bat
 #define STAT_MATCH_TIME			26		// Bat
 #define STAT_MATCH_STATUS       27
+#define STAT_VOTE_PROPOSAL      28
 
 
 
@@ -1164,8 +1165,9 @@ ROGUE - VERSIONS
 #define CS_GENERAL          (CS_PLAYERSKINS+MAX_CLIENTS)
 
 #define CS_VOTETIME         (CS_GENERAL + 1)
-#define CS_MATCHSTATUS      (CS_GENERAL + 2)
-#define CS_MATCHTIME        (CS_GENERAL + 3)
+#define CS_VOTEPROPOSAL     (CS_GENERAL + 2)
+#define CS_MATCHSTATUS      (CS_GENERAL + 3)
+#define CS_MATCHTIME        (CS_GENERAL + 4)
 #define MAX_CONFIGSTRINGS   (CS_GENERAL+MAX_GENERAL)
 
 

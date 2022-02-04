@@ -1035,6 +1035,9 @@ void SpawnEntities (char *mapname, char *entities, char *spawnpoint)
 
 	// give everyone an initial match status
 	gi.configstring(CS_MATCHSTATUS, "     pregame");
+
+	char time[15];
+	SecondsToTime(time, ((unsigned short)timelimit->value) * 60);
 }
 
 
@@ -1280,6 +1283,12 @@ char *dm_statusbar =
   "string \"Chasing\" "
   "xv 64 "
   "stat_string 16 "
+"endif "
+
+"if 28 "
+  "xl -16 "
+  "yb -32 "
+  "stat_string 28"
 "endif "
 ;
 

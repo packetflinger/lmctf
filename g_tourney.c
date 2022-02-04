@@ -407,7 +407,7 @@ void SecondsToTime(char *out, int secs)
                     seconds = 0;
 
     // don't let time be more than 99 hours
-    seconds = CLAMP(secs, 1, (99 * 3600));
+    seconds = CLAMP(secs, 0, (99 * 3600));
 
     if (seconds >= 3600) {
         hours = seconds / 3600;
@@ -564,6 +564,7 @@ void Tourney_Think(edict_t *ent)
             matchstate = MATCH_NONE;
             ent->think = G_FreeEdict;
             tourneyclock = NULL;
+            gi.configstring(CS_MATCHSTATUS, "  Match Over");
         }
     }
 
@@ -581,22 +582,25 @@ void KillMatch()
     }
 
     if ((int)autolock->value) {
-    	game.teamslocked = false;
+        game.teamslocked = false;
     }
+
+    gi.configstring(CS_MATCHSTATUS, "  Match Over");
 }
 
-void StartMatch (char *levelname)
+void StartMatch(char *levelname)
 {
-	if ((int) autolock->value) {
-		game.teamslocked = true;
-	}
+    if ((int) autolock->value) {
+        game.teamslocked = true;
+    }
 
     ctf_ChangeMap(levelname, true);
 }
 
-void SpawnTourneyClock ()
+void SpawnTourneyClock()
 {
-    edict_t    *ent;
+    edict_t *ent;
+    char    time[15];
 
     if (!tourneyclock) {
         ent = G_Spawn();
@@ -605,18 +609,18 @@ void SpawnTourneyClock ()
         ent = tourneyclock;
     }
 
-    if (matchstate == MATCH_RAILGUN_COUNTDOWN) {
-        ent->count = 16;
-    } else {
-        ent->count = (int)countdown_time->value;
+    ent->count = (int)countdown_time->value;
+    if (matchstate != MATCH_RAILGUN_COUNTDOWN) {
         matchstate = MATCH_COUNTDOWN;
     }
 
-    // game is about to start, lock teams if necessary
     if ((int)autolock->value) {
-    	game.teamslocked = true;
+        game.teamslocked = true;
     }
 
     ent->think = Tourney_Think;
     ent->nextthink = level.time + 1;
+
+    SecondsToTime(time, ent->count);
+    gi.configstring(CS_MATCHTIME, time);
 }

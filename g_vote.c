@@ -15,17 +15,75 @@ int VoteType;
 
 vote_t vote;
 
+static qboolean vote_victim(edict_t *ent) {
+    return false;
+}
+
+
+static qboolean vote_map(edict_t *ent) {
+    return false;
+}
+
+
+static qboolean vote_reset(edict_t *ent) {
+    return false;
+}
+
+
+static qboolean vote_fastswitch(edict_t *ent) {
+    return false;
+}
+
+
+static qboolean vote_timelimit(edict_t *ent) {
+    char *arg = gi.argv(2);
+    unsigned count = strtoul(arg, NULL, 10);
+    vote.intvalue = CLAMP(count, 1, 60);
+    return true;
+}
+
+
+static qboolean vote_mode(edict_t *ent) {
+    return false;
+}
+
+
+static qboolean vote_restart(edict_t *ent) {
+    return false;
+}
+
+
+static const vote_proposal_t vote_proposals[] = {
+    {"kick",        VOTE_KICK,      vote_victim},
+    {"map",         VOTE_MAP,       vote_map},
+    {"reset",       VOTE_RESET,     vote_reset},
+    {"fastswitch",  VOTE_SWITCH,    vote_fastswitch},
+    {"timelimit",   VOTE_TIMELIMIT, vote_timelimit},
+    {"mode",        VOTE_MODE,      vote_mode},
+    {"restart",     VOTE_RESTART,   vote_restart},
+    {NULL}
+};
+
+
 /**
  * Locate the proposal value based on string input
  */
-static uint8_t find_proposal(char *str)
+static vote_proposal_t *find_proposal(char *str)
 {
-    for (uint8_t i=0; i<VP_LENGTH; i++) {
-        //
+    const vote_proposal_t  *v;
+    for (v = vote_proposals; v->name; v++) {
+        if (!strcmp(str, v->name)) {
+            break;
+        }
     }
 
-    return 0;
+    if (!v) {
+        return 0;
+    }
+
+    return (vote_proposal_t *)v;
 }
+
 
 /**
  * A player cast their vote
@@ -51,23 +109,63 @@ void VoteCast(edict_t *ent, int8_t v)
  */
 void Cmd_Vote_f(edict_t *ent)
 {
+    if (!(int)vote_enabled->value) {
+        gi.cprintf(ent, PRINT_HIGH, "Voting is disabled on this server\n");
+        return;
+    }
+
     if (gi.argc() < 2) {
         gi.cprintf(ent, PRINT_HIGH, "Usage: vote <proposal> <args>\n");
         return;
     }
 
-    char *proposal = gi.argv(1);
-    if (Q_stricmp (proposal, "yes") == 0) {
+    char *arg1 = gi.argv(1);
+
+    if (Q_stricmp(arg1, "yes") == 0) {
         VoteCast(ent, VOTE_YES);
         return;
     }
 
-    if (Q_stricmp (proposal, "no") == 0) {
+    if (Q_stricmp(arg1, "no") == 0) {
         VoteCast(ent, VOTE_NO);
         return;
     }
 
+    if (vote.active) {
+        gi.cprintf(ent, PRINT_HIGH, "Vote already in progress\n");
+        return;
+    }
 
+    vote_proposal_t *p = find_proposal(arg1);
+    if (!p) {
+        gi.cprintf(ent, PRINT_HIGH, "Unknown proposal\n");
+        return;
+    }
+
+    if (!p->func(ent)) {
+        return;
+    }
+
+    vote.initiator = ent;
+    vote.proposal = p->bit;
+    //vote.lastvote = level.framenum;
+
+    VoteBuildProposalString(vote.display);
+
+    gi.bprintf(PRINT_HIGH, "%s started a vote: %s\n", NAME(ent), vote.display);
+    gi.configstring(CS_VOTEPROPOSAL, va("vote: %s", vote.display));
+
+    VoteStart();
+}
+
+
+void VoteBuildProposalString(char *output)
+{
+    if (vote.proposal == VOTE_TIMELIMIT) {
+        sprintf(output, "timelimit %d", vote.intvalue);
+    }
+
+    return;
 }
 
 /**
@@ -75,8 +173,19 @@ void Cmd_Vote_f(edict_t *ent)
  */
 void VoteThink(edict_t *ent)
 {
-    gi.cprintf(NULL, PRINT_HIGH, "VoteThink %d\n", level.framenum);
+    static char timeleft[15];
+    if (ent->count == 0) {
+        VoteFinished();
+        return;
+    }
+
+    SecondsToTime(timeleft, ent->count);
+
+    gi.cprintf(NULL, PRINT_HIGH, "VoteThink %s\n", timeleft);
+    gi.configstring(CS_VOTEPROPOSAL, va("%s Vote: %s", timeleft, vote.display));
+
     ent->nextthink = level.time + 1;
+    ent->count--;
 }
 
 
@@ -85,11 +194,15 @@ void VoteThink(edict_t *ent)
  */
 void VoteStart(void)
 {
-    memset(&vote, 0, sizeof(vote_t));
+    if (!(int)vote_enabled->value) {
+        return;
+    }
+
     vote.ent = G_Spawn();
     vote.votetime = level.framenum;
     vote.ent->think = VoteThink;
-    vote.ent->nextthink = level.time;
+    vote.ent->nextthink = level.time;   // fire immediately
+    vote.ent->count = (int)vote_time->value;
     vote.active = true;
 }
 
@@ -102,6 +215,17 @@ void VoteReset(void)
     vote.ent->think = G_FreeEdict;
     memset(&vote, 0, sizeof(vote_t));
 }
+
+void VoteFinished(void)
+{
+    // do stuff to figure out if the vote passed
+    gi.cprintf(NULL, PRINT_HIGH, "Vote Finished!\n");
+    vote.active = false;
+    memset(vote.ent, 0, sizeof(edict_t));
+}
+
+
+
 
 //////// Remove all below ///////////////
 int Clear_All_Ballots (edict_t *ent)
