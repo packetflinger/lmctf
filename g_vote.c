@@ -206,6 +206,7 @@ void Cmd_Vote_f(edict_t *ent)
 
     gi.sound(ent, CHAN_ITEM, gi.soundindex("misc/secret.wav"), 1, ATTN_NONE, 0);
 
+    // initiator automatically votes yes
     ent->client->vote.vote = VOTE_YES;
     ent->client->vote.callcount++;
     ent->client->vote.lastcall = level.framenum;
@@ -284,13 +285,24 @@ void VoteThink(edict_t *ent)
 
     // count the votes and see if they're above the winning threshold
     VoteCounts(&res);
-    percent = (res.yes_count / (res.yes_count + res.no_count)) * 100;
+
+    percent = (res.yes_count / (res.yes_count + res.no_count + res.unvoted)) * 100;
     if (res.yes_count + res.no_count > 0 && percent >= vote_threshold->value) {
+        gi.dprintf("%f percent\n", percent);
+        gi.dprintf("%d yes, %d no\n", res.yes_count, res.no_count);
         VoteSuccess();
     }
 
     // we ran out of time
     if (ent->count == 0) {
+        percent = (res.yes_count / (res.yes_count + res.no_count)) * 100;
+        if (res.yes_count + res.no_count > 0 && percent >= vote_threshold->value) {
+            gi.dprintf("%f percent\n", percent);
+            gi.dprintf("%d yes, %d no\n", res.yes_count, res.no_count);
+            VoteSuccess();
+            return;
+        }
+
         VoteFail();
         VoteReset();
         return;
@@ -329,6 +341,10 @@ void VoteCounts(vote_result_t *results)
 
             if (ent->client->vote.vote < 0) {
                 results->no_count++;
+            }
+
+            if (ent->client->vote.vote == 0) {
+                results->unvoted++;
             }
         }
     }

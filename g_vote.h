@@ -75,6 +75,7 @@ typedef struct {
 typedef struct {
     uint8_t yes_count;
     uint8_t no_count;
+    uint8_t unvoted;
 } vote_result_t;
 
 
