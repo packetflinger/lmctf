@@ -519,7 +519,7 @@ int map_count = 0;
 	}
 
 	KillMatch();
-	Write_Highscore_Table();
+	//Write_Highscore_Table();
 
 
 	// stay on same level flag
