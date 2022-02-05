@@ -15,6 +15,7 @@ static qboolean vote_ref(edict_t *ent)
     char *id = gi.argv(2);
     unsigned val = strtoul(id, NULL, 10);
     if (val > game.maxclients) {
+        gi.cprintf(ent, PRINT_HIGH, "Invalid client ID\n");
         return false;
     }
 
@@ -37,6 +38,7 @@ static qboolean vote_victim(edict_t *ent) {
     char *id = gi.argv(2);
     unsigned val = strtoul(id, NULL, 10);
     if (val > game.maxclients) {
+        gi.cprintf(ent, PRINT_HIGH, "Invalid client ID\n");
         return false;
     }
 
