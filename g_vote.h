@@ -12,6 +12,7 @@
 #define VOTE_YES            1
 #define VOTE_NO            -1
 
+
 // proposal types
 #define VOTE_REF            (1<<0)
 #define VOTE_KICK           (1<<1)
@@ -34,18 +35,18 @@ typedef struct {
  * The main structure to hold voting data
  */
 typedef struct {
-    edict_t     *ent;                   // the vote entity
-    qboolean    active;                 // are we currently voting?
-    uint32_t    votetime;               // frame number this vote was started
-    uint32_t    lastvote;               // frame of last vote, for throttling
-    uint8_t     proposal;               // what are we voting on?
-    uint32_t    intvalue;               // number values
+    edict_t     *ent;               // the vote entity
+    qboolean    active;             // are we currently voting?
+    uint32_t    votetime;           // frame number this vote was started
+    uint32_t    lastvote;           // frame of last vote, for throttling
+    uint8_t     proposal;           // what are we voting on?
+    uint32_t    intvalue;           // number values
     char        strvalue[MAX_VOTE_STRLEN];   // string values
-    char        display[0xff];          // for displaying the current proposals
-    int8_t      results;                // + is yes, - is no
-    uint8_t     votes;                  // how many players have voted
-    edict_t     *initiator;             // who called the vote?
-    edict_t     *victim;                // for kick/mute, who is the target?
+    char        display[0xff];      // for displaying the current proposals
+    int8_t      results;            // + is yes, - is no
+    uint8_t     votes;              // how many players have voted
+    edict_t     *initiator;         // who called the vote?
+    edict_t     *victim;            // for kick/mute, who is the target?
 } vote_t;
 
 
@@ -53,12 +54,12 @@ typedef struct {
  * To store the current result
  */
 typedef struct {
-    uint8_t total;              // total votes cast
-    uint8_t yes;                // how many voted yes
-    uint8_t no;                 // how many voted no
-    uint8_t unvoted;            // how many didn't vote
-    float   pct_raw;            // % yes of all team players
-    float   pct_votes;          // % yes of just ppl who voted
+    uint8_t     total;              // total votes cast
+    uint8_t     yes;                // how many voted yes
+    uint8_t     no;                 // how many voted no
+    uint8_t     unvoted;            // how many didn't vote
+    float       pct_raw;            // % yes of all team players
+    float       pct_votes;          // % yes of just ppl who voted
 } vote_result_t;
 
 
@@ -66,9 +67,9 @@ typedef struct {
  * Each client has this structure
  */
 typedef struct {
-    uint32_t    lastcall;       // the last frame this user called a vote
-    uint32_t    callcount;      // how many votes this user has called
-    int8_t      vote;           // 0 = not voted, + is yes, - is no
+    uint32_t    lastcall;           // the last frame this user called a vote
+    uint32_t    callcount;          // how many votes this user has called
+    int8_t      vote;               // 0 = not voted, + is yes, - is no
 } client_vote_t;
 
 

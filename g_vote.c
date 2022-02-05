@@ -30,7 +30,8 @@ static qboolean vote_ref(edict_t *ent)
 }
 
 
-static qboolean vote_victim(edict_t *ent) {
+static qboolean vote_victim(edict_t *ent)
+{
     if (gi.argc() < 3) {
         return false;
     }
@@ -62,7 +63,8 @@ static qboolean vote_victim(edict_t *ent) {
 }
 
 
-static qboolean vote_map(edict_t *ent) {
+static qboolean vote_map(edict_t *ent)
+{
     if (gi.argc() < 3) {
         return false;
     }
@@ -73,12 +75,14 @@ static qboolean vote_map(edict_t *ent) {
 }
 
 
-static qboolean vote_reset(edict_t *ent) {
+static qboolean vote_reset(edict_t *ent)
+{
     return false;
 }
 
 
-static qboolean vote_fastswitch(edict_t *ent) {
+static qboolean vote_fastswitch(edict_t *ent)
+{
     char *fs = gi.argv(2);
     unsigned val = strtoul(fs, NULL, 10);
 
@@ -92,7 +96,8 @@ static qboolean vote_fastswitch(edict_t *ent) {
 }
 
 
-static qboolean vote_timelimit(edict_t *ent) {
+static qboolean vote_timelimit(edict_t *ent)
+{
     char *arg = gi.argv(2);
     unsigned count = strtoul(arg, NULL, 10);
     vote.intvalue = CLAMP(count, 1, 60);
@@ -100,12 +105,14 @@ static qboolean vote_timelimit(edict_t *ent) {
 }
 
 
-static qboolean vote_mode(edict_t *ent) {
+static qboolean vote_mode(edict_t *ent)
+{
     return false;
 }
 
 
-static qboolean vote_restart(edict_t *ent) {
+static qboolean vote_restart(edict_t *ent)
+{
     return false;
 }
 
