@@ -73,9 +73,12 @@ typedef struct {
  * To store the current result
  */
 typedef struct {
-    uint8_t yes;
-    uint8_t no;
-    uint8_t unvoted;
+    uint8_t total;              // total votes cast
+    uint8_t yes;                // how many voted yes
+    uint8_t no;                 // how many voted no
+    uint8_t unvoted;            // how many didn't vote
+    float   pct_raw;            // % yes of all team players
+    float   pct_votes;          // % yes of just ppl who voted
 } vote_result_t;
 
 

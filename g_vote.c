@@ -283,24 +283,17 @@ void VoteThink(edict_t *ent)
 {
     static char timeleft[15];
     vote_result_t res;
-    float percent;
 
-    // count the votes and see if they're above the winning threshold
     VoteCounts(&res);
 
-    percent = (res.yes / (res.yes + res.no + res.unvoted)) * 100;
-    if (res.yes + res.no > 0 && percent >= vote_threshold->value) {
-        gi.dprintf("%f percent\n", percent);
-        gi.dprintf("%d yes, %d no\n", res.yes, res.no);
+    if (res.total > 0 && res.pct_raw >= vote_threshold->value) {
         VoteSuccess();
+        return;
     }
 
-    // we ran out of time
+    // time is up
     if (ent->count == 0) {
-        percent = (res.yes / (res.yes + res.no)) * 100;
-        if (res.yes + res.no > 0 && percent >= vote_threshold->value) {
-            gi.dprintf("%f percent\n", percent);
-            gi.dprintf("%d yes, %d no\n", res.yes, res.no);
+        if (res.total > 0 && res.pct_votes >= vote_threshold->value) {
             VoteSuccess();
             return;
         }
@@ -320,7 +313,7 @@ void VoteThink(edict_t *ent)
 
 
 /**
- * Counts everyone's votes, calculates stuf
+ * Counts everyone's votes, calculates percentages/totals
  */
 void VoteCounts(vote_result_t *results)
 {
@@ -353,6 +346,10 @@ void VoteCounts(vote_result_t *results)
             }
         }
     }
+
+    results->total = results->yes + results->no;
+    results->pct_raw = (results->yes / (results->total + results->unvoted)) * 100;
+    results->pct_votes = (results->yes / results->total) * 100;
 }
 
 
