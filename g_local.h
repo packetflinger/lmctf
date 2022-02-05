@@ -47,20 +47,21 @@
 
 #include "game.h"
 
-#define world    (&g_edicts[0])
+#define world           (&g_edicts[0])
 
-// true if player has referee status
-#define ISREF(ent) (ent->client->ctf.extra_flags & CTF_EXTRAFLAGS_REFEREE)
-
+#define ISREF(ent)      (ent->client->ctf.extra_flags & CTF_EXTRAFLAGS_REFEREE)
 #define CLAMP(val, low, high) ((val < low) ? low : (val > high) ? high : val)
-#define NAME(ent) (ent->client->pers.netname)
+#define NAME(ent)       (ent->client->pers.netname)
+#define FRAGS(ent)      (ent->client->ps.stats[STAT_FRAGS])
+#define ID(ent)         (ent->client - game.clients)
+#define CAPTURES(ent)   (ent->client->p_stats_player->stats[STAT_CAPTURES])
 
 // the "gameversion" client command will print this plus compile date
-#define GAMEVERSION "LMCTF 6"
+#define GAMEVERSION     "LMCTF 6"
 
 // first non-player entity
-#define FIRSTENTITY (g_edicts + 1 + game.maxclients)
-#define LASTENTITY  (g_edicts + globals.num_edicts)
+#define FIRSTENTITY     (g_edicts + 1 + game.maxclients)
+#define LASTENTITY      (g_edicts + globals.num_edicts)
 
 #define PLAYEROWNED(e)  (e->owner >= (g_edicts + 1) && e->owner <= (g_edicts + game.maxclients))
 #define ISTRIGGER(e)    (e->enttype == ENT_DOOR_TRIGGER || e->enttype == ENT_PLAT_TRIGGER)
