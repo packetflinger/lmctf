@@ -175,6 +175,11 @@ void Cmd_Vote_f(edict_t *ent)
         return;
     }
 
+    if (ent->client->pers.spectator) {
+        gi.cprintf(ent, PRINT_HIGH, "Spectators cannot vote\n");
+        return;
+    }
+
     if (gi.argc() < 2) {
         VoteUsage(ent);
         return;
