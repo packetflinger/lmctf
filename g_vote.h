@@ -1,39 +1,18 @@
 /**
  * Voting stuff
  */
-
 #pragma once
 
 #include "g_local.h"
 
-void Vote_Menu (edict_t *ent);
-void Vote_YES (edict_t *ent);
-void Vote_NO (edict_t *ent);
-void Check_Vote(void);
-
-// vote->value flags
-#define CTF_VOTE_STARTED        1
-//assorted client flags, in the true meaning
-#define CTF_EXTRAFLAGS_VOTE_YES 64
-#define CTF_EXTRAFLAGS_VOTE_NO  128
-
-//votetypes
-#define CTF_VOTETYPE_SKIP       1
-#define CTF_VOTETYPE_GOTOMAP    2
-#define CTF_VOTETYPE_REFPLAYER  4
-
-#define PERCENT_MAJORITY_REQUIRED   75 //requires a 75% majority for the vote to pass
-
-extern int VoteStarted;
-extern float VoteTime;
-extern int VoteType;
-
 // max length of a string used in a vote proposal (like map name)
 #define MAX_VOTE_STRLEN     32
+
+
 #define VOTE_YES            1
 #define VOTE_NO            -1
 
-
+// proposal types
 #define VOTE_KICK           (1<<0)
 #define VOTE_MAP            (1<<1)
 #define VOTE_RESET          (1<<2)
