@@ -1847,37 +1847,32 @@ void Cmd_GotoMap_f (edict_t *ent)
 	}
 }
 
+/**
+ * Show player info (id, name, frags)
+ */
 void Cmd_Users_f (edict_t *ent)
 {
-//	int		i;
-//	int		count=0;
-//	char	small[64];
-//	char	large[1280];
+    char message[MAX_INFO_STRING];
+    char status[MAX_INFO_STRING];
 
-	char message[MAX_INFO_STRING];
-	char status[MAX_INFO_STRING];
+    // print information
+    edict_t * player = NULL;
+    player = ctf_findplayer(NULL, NULL, CTF_TEAM_IGNORETEAM);
+    while (player) {
+        strcpy(status, "");
+        if (player->client->ctf.extra_flags & CTF_EXTRAFLAGS_RCON) {
+            strcat(status, "[RCON] ");
+        } else if (player->client->ctf.extra_flags & CTF_EXTRAFLAGS_REFEREE) {
+            strcat(status, "(REF)  ");
+        } else {
+            strcat(status, "PLAYER ");
+        }
+        sprintf(message, " id: %lu %s frags: %d\n", ID(player), NAME(player), FRAGS(player));
+        strcat(status, message);
+        ctf_SafePrint(ent, PRINT_HIGH, status);
 
-	// print information
-	edict_t * player = NULL;
-	player = ctf_findplayer(NULL, NULL, CTF_TEAM_IGNORETEAM);
-	while (player)
-	{
-		strcpy(status, "");
-		if (player->client->ctf.extra_flags & CTF_EXTRAFLAGS_RCON)
-			strcat(status, "[RCON] ");
-		else if (player->client->ctf.extra_flags & CTF_EXTRAFLAGS_REFEREE)
-			strcat(status, "(REF)  ");
-		else
-			strcat(status, "PLAYER ");
-		sprintf(message, " id: %lu %s frags: %d\n",
-			player->client->ctf.ctfid,
-			player->client->pers.netname,
-			player->client->ps.stats[STAT_FRAGS]);
-		strcat(status, message);
-		ctf_SafePrint(ent, PRINT_HIGH, status);
-
-		player = ctf_findplayer(player, NULL, CTF_TEAM_IGNORETEAM);
-	}
+        player = ctf_findplayer(player, NULL, CTF_TEAM_IGNORETEAM);
+    }
 }
 
 //Force a client to observer (they probably went AFK and didn't come back)
