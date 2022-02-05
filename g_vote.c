@@ -4,18 +4,30 @@
 #include "g_tourney.h"
 #include "g_vote.h"
 
-/*
-int Clear_All_Ballots (edict_t *ent);
-void Vote_Skip_Level (edict_t *ent);
-void Vote_Jump_Level (edict_t *ent);
-void Vote_Ref_Player (edict_t *ent);
-
-int VoteStarted = false;
-float VoteTime = 0.0;
-int VoteType;
-*/
-
 vote_t vote;
+
+static qboolean vote_ref(edict_t *ent)
+{
+    if (gi.argc() < 3) {
+        return false;
+    }
+    static edict_t *newref;
+    char *id = gi.argv(2);
+    unsigned val = strtoul(id, NULL, 10);
+    if (val > game.maxclients) {
+        return false;
+    }
+
+    newref = g_edicts + 1 + val;
+    if (ISREF(newref)) {
+        gi.cprintf(ent, PRINT_HIGH, "%s is already a referee\n", NAME(newref));
+        return false;
+    }
+
+    vote.victim = newref;
+    return true;
+}
+
 
 static qboolean vote_victim(edict_t *ent) {
     if (gi.argc() < 3) {
@@ -30,6 +42,16 @@ static qboolean vote_victim(edict_t *ent) {
 
     vic = g_edicts + 1 + val;
     if (!vic->inuse) {
+        return false;
+    }
+
+    if (ISREF(vic)){
+        gi.cprintf(ent, PRINT_HIGH, "%s is a referee, you can't vote kick them\n", NAME(vic));
+        return false;
+    }
+
+    if (vic == ent) {
+        gi.cprintf(ent, PRINT_HIGH, "You can't vote kick yourself\n");
         return false;
     }
 
@@ -87,6 +109,7 @@ static qboolean vote_restart(edict_t *ent) {
 
 
 static const vote_proposal_t vote_proposals[] = {
+    {"ref",         VOTE_REF,       vote_ref},
     {"kick",        VOTE_KICK,      vote_victim},
     {"map",         VOTE_MAP,       vote_map},
     {"reset",       VOTE_RESET,     vote_reset},
@@ -218,6 +241,10 @@ void Cmd_Vote_f(edict_t *ent)
 void VoteBuildProposalString(char *output)
 {
     switch (vote.proposal) {
+    case VOTE_REF:
+        sprintf(output, "promote %s to referee", NAME(vote.victim));
+        break;
+
     case VOTE_TIMELIMIT:
         sprintf(output, "timelimit %d", vote.intvalue);
         break;
@@ -270,6 +297,10 @@ void VoteUsage(edict_t *ent)
 
     if (mask & VOTE_KICK) {
         strcat(buf, "  kick <playerID>                      Remove a player from the server (use \"players\" command to find ID\n");
+    }
+
+    if (mask & VOTE_REF) {
+        strcat(buf, "  ref <playerID>                       Give a player referee status (use \"players\" command to find ID\n");
     }
 
     gi.cprintf(ent, PRINT_HIGH, buf);
@@ -379,6 +410,14 @@ void VoteSuccess(void)
 
     case VOTE_KICK:
         gi.AddCommandString(va("kick %d", (int)(vote.victim->client - game.clients)));
+        break;
+
+    case VOTE_REF:
+        vote.victim->client->ctf.extra_flags |= CTF_EXTRAFLAGS_REFEREE;
+        gi.bprintf(PRINT_HIGH, "%s is now a referee\n", NAME(vote.victim));
+        break;
+
+    case VOTE_RESTART:
         break;
     }
 

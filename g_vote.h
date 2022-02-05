@@ -13,13 +13,14 @@
 #define VOTE_NO            -1
 
 // proposal types
-#define VOTE_KICK           (1<<0)
-#define VOTE_MAP            (1<<1)
-#define VOTE_RESET          (1<<2)
-#define VOTE_SWITCH         (1<<3)
-#define VOTE_TIMELIMIT      (1<<4)
-#define VOTE_MODE           (1<<5)
-#define VOTE_RESTART        (1<<6)
+#define VOTE_REF            (1<<0)
+#define VOTE_KICK           (1<<1)
+#define VOTE_MAP            (1<<2)
+#define VOTE_RESET          (1<<3)
+#define VOTE_SWITCH         (1<<4)
+#define VOTE_TIMELIMIT      (1<<5)
+#define VOTE_MODE           (1<<6)
+#define VOTE_RESTART        (1<<7)
 
 
 typedef struct {
