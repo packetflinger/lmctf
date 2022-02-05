@@ -70,6 +70,15 @@ typedef struct {
 
 
 /**
+ * To store the current result
+ */
+typedef struct {
+    uint8_t yes_count;
+    uint8_t no_count;
+} vote_result_t;
+
+
+/**
  * Each client has this structure
  */
 typedef struct {
@@ -86,3 +95,7 @@ void Cmd_Vote_f(edict_t *ent);
 void VoteCast(edict_t *ent, int8_t v);
 void VoteBuildProposalString(char *output);
 void VoteFinished(void);
+void VoteCounts(vote_result_t *results);
+void VoteSuccess(void);
+void VoteFail(void);
+void VoteUsage(edict_t *ent);
