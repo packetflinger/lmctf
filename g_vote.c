@@ -125,6 +125,11 @@ void VoteCast(edict_t *ent, int8_t v)
         return;
     }
 
+    if (!vote.active) {
+        gi.cprintf(ent, PRINT_HIGH, "No vote in progress\n");
+        return;
+    }
+
     char *strvote = (v > 0) ? "YES" : "NO";
     if (ent->client->vote.vote != 0) {
         gi.bprintf(PRINT_HIGH, "%s changed their vote to %s\n", NAME(ent), strvote);
