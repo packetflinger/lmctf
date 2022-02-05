@@ -98,7 +98,6 @@ menuitem mainmenu[] =
 //#endif
 	{ "Change Team", Cmd_Team_f },
 	{ "Change Skin", Skin_Menu },
-	{ "Vote menu", Vote_Menu },          //Vampire - voting menu
 	{ "", 0 },
 	{ "Help", Help_Menu },
 };
@@ -295,14 +294,9 @@ void Main_Menu (edict_t *ent)
 		Menu_Set(ent, 3, "Become Observer", Observe_Exec);
 		Menu_Set(ent, 4, "Change Team", Change_Team_Exec);
 	}
-//#else
-//	Menu_Set(ent, 4, "Change Team", Change_Team_Exec);
-//#endif
 	Menu_Set(ent, 5, "Change Skin", Skin_Menu);
 	Menu_Set(ent, 6, "Radio Sounds", Radio_Menu);
 	Menu_Set(ent, 7, "Voice Sounds", Voice_Menu);
-	if (!((int)ctfflags->value & CTF_VOTEMENU_OFF))
-		Menu_Set(ent, 8, "Voting Menu", Vote_Menu);              //Vampire -- voting menu
 	if (cl->ctf.extra_flags & CTF_EXTRAFLAGS_REFEREE)
 		Menu_Set(ent, 9, "Referee Menu", Ref_Main_Menu);
 	Menu_Set(ent, 10, "Help", Help_Menu);

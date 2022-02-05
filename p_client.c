@@ -3046,12 +3046,7 @@ void ClientBeginServerFrame (edict_t *ent)
 	gclient_t	*client;
 	int			buttonMask;
 
-
-	// CTF CODE -- LM_JORM
 	RuneThinkHook(ent);
-	if (VoteStarted)
-		Check_Vote();               //Vampire -- Checking if the time is up for the voting menu
-	// END CTF CODE -- LM_JORM
 	
 	if (level.intermissiontime)
 		return;

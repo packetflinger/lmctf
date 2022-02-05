@@ -2603,22 +2603,6 @@ void ClientCommand (edict_t *ent)
 		Cmd_PingAlert_f (ent);
 		return;
 	}
-	else if (Q_stricmp (cmd, "voteyes") == 0)   //Vampire -- voting menu
-	{
-		if (VoteStarted)
-			Vote_YES (ent);
-		else
-			gi.cprintf(ent, PRINT_LOW,"A vote has not been initiated.\n");
-		return;
-	}
-	else if (Q_stricmp (cmd, "voteno") == 0)    //Vampire -- voting menu
-	{
-		if (VoteStarted)
-			Vote_NO (ent);
-		else
-			gi.cprintf(ent, PRINT_LOW,"A vote has not been initiated.\n");
-		return;
-	}
 
 	if (level.intermissiontime)
 		return;
