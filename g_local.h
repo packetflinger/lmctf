@@ -564,6 +564,7 @@ extern cvar_t       *fraglimit;
 extern cvar_t       *g_select_empty;
 extern cvar_t       *gamedir;
 extern cvar_t       *gun_x, *gun_y, *gun_z;
+extern cvar_t       *highscore_folder;
 extern cvar_t       *hostname;
 extern cvar_t       *logrename;
 extern cvar_t       *maplist_file;

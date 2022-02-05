@@ -83,6 +83,7 @@ cvar_t  *vote_enabled;
 cvar_t  *vote_mask;
 cvar_t  *vote_threshold;
 cvar_t  *vote_time;
+cvar_t  *highscore_folder;
 
 
 #ifdef ZBOT

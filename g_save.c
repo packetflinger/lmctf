@@ -224,6 +224,7 @@ void InitGame(void)
 	vote_mask = gi.cvar("vote_mask", "65535", 0);
 	vote_threshold = gi.cvar("vote_threshold", "50", 0);
 	vote_time = gi.cvar("vote_time", "30", 0);
+	highscore_folder = gi.cvar("highscore_folder", "highscores", CVAR_LATCH);
 
 
 #ifdef ZBOT
